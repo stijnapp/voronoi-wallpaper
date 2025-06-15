@@ -1,19 +1,19 @@
 let config = {
-    dotsPer100Pixels: 0.5,
-    dotCount: 75,
+    dotsPer100Pixels: 0.4,
     speedMultiplier: 0.5,
-    frameRateLimit: 60,
+    frameRateLimit: 30,
     backgroundColor: [0, 0, 0],
     borderColor: [222,222,222],
-    cornerRadius: 10,
-    glowSize: 8,
-    glowAlpha: 80
+    canvasPadding: 50,
+    roundedCorners: true,
+    cornerRoundness: 10, // TODO: Implement corner roundness
+    debug: true,
 };
 
 let dots = [];
 let lastTime = 0;
 let delaunay, voronoi;
-const CANVAS_PADDING = 50;
+let previousFPS = [];
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -23,18 +23,16 @@ function setup() {
 }
 
 function draw() {
-    background(config.borderColor); // Set background color
-    updateDots();
-    drawVoronoiCells();
-    // drawDebugDots(255, 0, 0);
-    // drawDebugLines(255, 0, 0);
-    // console.log(`FPS: ${frameRate().toFixed(2)}`);
+    background(config.borderColor);
 
-    // draw the framerate as text in the top left corner
-    fill(255);
-    noStroke();
-    textSize(16);
-    text(`FPS: ${frameRate().toFixed(2)}`, 10, 20);
+    updateDots();
+    drawVoronoiCells(config.roundedCorners);
+
+    if (config.debug) {
+        drawDebugDots(255, 0, 0);
+        drawDebugLines(255, 0, 0);
+        drawFrameRate();
+    }
 }
 
 function windowResized() {
@@ -43,10 +41,11 @@ function windowResized() {
 }
 
 function generateRandomDots() {
-    config.dotCount = Math.floor((width * height) / (100 * 100)) * config.dotsPer100Pixels;
+    let dotCount = Math.floor((width * height) / (100 * 100) * config.dotsPer100Pixels);
+    // console.log(`Generating ${dotCount} dots`);
 
     dots = [];
-    for (let i = 0; i < config.dotCount; i++) {
+    for (let i = 0; i < dotCount; i++) {
         dots.push(generateRandomDot());
     }
 }
@@ -82,10 +81,10 @@ function updateDots() {
             dot.direction = -dot.direction;
         }
 
-        // change direction slightly
+        // change direction randomly
         dot.direction += random(-0.05, 0.05);
 
-        // change speed slightly
+        // change speed randomly
         dot.speed += random(-0.01, 0.01);
         dot.speed = constrain(dot.speed, 0.1, 0.3); // Keep speed within bounds
 
@@ -95,7 +94,7 @@ function updateDots() {
     }
 }
 
-function drawVoronoiCells() {
+function drawVoronoiCells(roundedCorners = true) {
     // Create points array from dots for d3-delaunay
     let points = [];
     for (let dot of dots) {
@@ -106,7 +105,7 @@ function drawVoronoiCells() {
 
     // Create Delaunay triangulation and Voronoi diagram
     delaunay = d3.Delaunay.from(dots.map(dot => [dot.x, dot.y]));
-    voronoi = delaunay.voronoi([-CANVAS_PADDING, -CANVAS_PADDING, width + CANVAS_PADDING, height + CANVAS_PADDING]);
+    voronoi = delaunay.voronoi([-config.canvasPadding, -config.canvasPadding, width + config.canvasPadding, height + config.canvasPadding]);
 
     // Draw Voronoi cells with smooth rounded corners
     stroke(config.borderColor);
@@ -115,15 +114,17 @@ function drawVoronoiCells() {
 
     for (let i = 0; i < dots.length; i++) {
         let cell = voronoi.cellPolygon(i);
-        if (cell && cell.length > 2) {
-            // beginShape();
-            // for (let j = 0; j < cell.length; j++) {
-            //     let v = cell[j];
-            //     vertex(v[0], v[1]);
-            // }
-            // endShape(CLOSE);
+        if (!cell || cell.length < 3) continue; // Skip if no cell or not enough points
 
+        if (roundedCorners) {
             drawRoundedPolygon(cell);
+        } else {
+            beginShape();
+            for (let j = 0; j < cell.length; j++) {
+                let v = cell[j];
+                vertex(v[0], v[1]);
+            }
+            endShape(CLOSE);
         }
     }
 }
@@ -186,78 +187,15 @@ function drawDebugLines(r, g, b) {
     }
 }
 
-function keyPressed() {
-    // Dot count controls
-    if (key === 'a' || key === 'A') {
-        const current = config.dotCount;
-        config.dotCount = max(1, config.dotCount - 1);
-        console.log('Dot count:', config.dotCount);
-
-        if (current !== config.dotCount) {
-            dots.pop();
-        }
-        // generateRandomDots();
+function drawFrameRate() {
+    // draw the framerate as text in the top left corner
+    previousFPS.push(frameRate());
+    if (previousFPS.length > 100) {
+        previousFPS.shift();
     }
-    if (key === 'q' || key === 'Q') {
-        const current = config.dotCount;
-        config.dotCount = min(50, config.dotCount + 1);
-        console.log('Dot count:', config.dotCount);
-
-        if (current !== config.dotCount) {
-            dots.push(generateRandomDot());
-        }
-        // generateRandomDots();
-    }
-
-    // Speed controls
-    if (key === 'w' || key === 'W') {
-        config.speedMultiplier = min(5, config.speedMultiplier + (key === 'W' ? 1 : 0.1));
-        console.log('Speed multiplier:', config.speedMultiplier);
-    }
-    if (key === 's' || key === 'S') {
-        config.speedMultiplier = max(0.1, config.speedMultiplier - (key === 'S' ? 1 : 0.1));
-        console.log('Speed multiplier:', config.speedMultiplier);
-    }
-
-    // FPS controls
-    if (key === 'e' || key === 'E') {
-        config.frameRateLimit = min(120, config.frameRateLimit + 5);
-        console.log('FPS cap:', config.frameRateLimit);
-        frameRate(config.frameRateLimit);
-    }
-    if (key === 'd' || key === 'D') {
-        config.frameRateLimit = max(10, config.frameRateLimit - 5);
-        console.log('FPS cap:', config.frameRateLimit);
-        frameRate(config.frameRateLimit);
-    }
-
-    // Corner radius controls
-    if (key === 'r' || key === 'R') {
-        config.cornerRadius = min(50, config.cornerRadius + (key === 'R' ? 5 : 1));
-        console.log('Corner radius:', config.cornerRadius);
-    }
-    if (key === 'f' || key === 'F') {
-        config.cornerRadius = max(0, config.cornerRadius - (key === 'F' ? 5 : 1));
-        console.log('Corner radius:', config.cornerRadius);
-    }
-
-    // Glow size controls
-    if (key === 't' || key === 'T') {
-        config.glowSize = min(20, config.glowSize + (key === 'T' ? 2 : 1));
-        console.log('Glow size:', config.glowSize);
-    }
-    if (key === 'g' || key === 'G') {
-        config.glowSize = max(0, config.glowSize - (key === 'G' ? 2 : 1));
-        console.log('Glow size:', config.glowSize);
-    }
-
-    // Glow alpha controls
-    if (key === 'y' || key === 'Y') {
-        config.glowAlpha = min(255, config.glowAlpha + (key === 'Y' ? 20 : 5));
-        console.log('Glow alpha:', config.glowAlpha);
-    }
-    if (key === 'h' || key === 'H') {
-        config.glowAlpha = max(0, config.glowAlpha - (key === 'H' ? 20 : 5));
-        console.log('Glow alpha:', config.glowAlpha);
-    }
+    let avgFPS = previousFPS.reduce((a, b) => a + b, 0) / previousFPS.length;
+    fill(255);
+    noStroke();
+    textSize(16);
+    text(`FPS: ${avgFPS.toFixed(0)}`, 10, 20);
 }
