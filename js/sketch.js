@@ -6,7 +6,7 @@ let config = {
     borderColor: [75, 75, 75],
     borderWidth: 5,
     canvasPadding: 50,
-    cornerRoundness: 0.7, // TODO: Implement corner roundness
+    cornerSharpness: 0.7,
     debug: false,
 };
 
@@ -124,20 +124,17 @@ function drawRoundedPolygon(points) {
     points.pop();
     if (points.length < 3) return;
 
-    if (config.cornerRoundness <= 0) {
-        beginShape();
-        for (let j = 0; j < points.length; j++) {
-            let v = points[j];
-            vertex(v[0], v[1]);
-        }
-        endShape(CLOSE);
-        return;
-    }
+    // if (config.cornerSharpness >= 10) {
+    //     beginShape();
+    //     for (let j = 0; j < points.length; j++) {
+    //         let v = points[j];
+    //         vertex(v[0], v[1]);
+    //     }
+    //     endShape(CLOSE);
+    //     return;
+    // }
 
     beginShape();
-
-    let first = points[0];
-    vertex(first[0], first[1]);
 
     for (let i = 0; i < points.length + 1; i++) {
         let current = points[i % points.length];
@@ -147,11 +144,17 @@ function drawRoundedPolygon(points) {
         let midX = (current[0] + next[0]) / 2;
         let midY = (current[1] + next[1]) / 2;
 
+        // TODO: implement corner roundness
+        let control1x = current[0];
+        let control1y = current[1];
+        let control2x = current[0];
+        let control2y = current[1];
+
         // Draw a bezier curve to the midpoint
         if (i === 0) {
             vertex(midX, midY);
         } else {
-            bezierVertex(current[0], current[1], current[0], current[1], midX, midY);
+            bezierVertex(control1x, control1y, control2x, control2y, midX, midY);
         }
     }
 
