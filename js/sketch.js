@@ -6,7 +6,6 @@ let config = {
     borderColor: [75, 75, 75],
     borderWidth: 5,
     canvasPadding: 50,
-    roundedCorners: true,
     cornerRoundness: 0.7, // TODO: Implement corner roundness
     debug: false,
 };
@@ -27,7 +26,7 @@ function draw() {
     background(config.borderColor);
 
     updateDots();
-    drawVoronoiCells(config.roundedCorners);
+    drawVoronoiCells();
 
     if (config.debug) {
         drawDebugDots(255, 0, 0);
@@ -95,7 +94,7 @@ function updateDots() {
     }
 }
 
-function drawVoronoiCells(roundedCorners = true) {
+function drawVoronoiCells() {
     // Create points array from dots for d3-delaunay
     let points = [];
     for (let dot of dots) {
@@ -117,22 +116,23 @@ function drawVoronoiCells(roundedCorners = true) {
         let cell = voronoi.cellPolygon(i);
         if (!cell || cell.length < 3) continue; // Skip if no cell or not enough points
 
-        if (roundedCorners) {
-            drawRoundedPolygon(cell);
-        } else {
-            beginShape();
-            for (let j = 0; j < cell.length; j++) {
-                let v = cell[j];
-                vertex(v[0], v[1]);
-            }
-            endShape(CLOSE);
-        }
+        drawRoundedPolygon(cell);
     }
 }
 
 function drawRoundedPolygon(points) {
     points.pop();
     if (points.length < 3) return;
+
+    if (config.cornerRoundness <= 0) {
+        beginShape();
+        for (let j = 0; j < points.length; j++) {
+            let v = points[j];
+            vertex(v[0], v[1]);
+        }
+        endShape(CLOSE);
+        return;
+    }
 
     beginShape();
 
