@@ -3,11 +3,12 @@ let config = {
     speedMultiplier: 0.5,
     frameRateLimit: 30,
     backgroundColor: [0, 0, 0],
-    borderColor: [222,222,222],
+    borderColor: [75, 75, 75],
+    borderWidth: 5,
     canvasPadding: 50,
     roundedCorners: true,
-    cornerRoundness: 10, // TODO: Implement corner roundness
-    debug: true,
+    cornerRoundness: 0.7, // TODO: Implement corner roundness
+    debug: false,
 };
 
 let dots = [];
@@ -109,7 +110,7 @@ function drawVoronoiCells(roundedCorners = true) {
 
     // Draw Voronoi cells with smooth rounded corners
     stroke(config.borderColor);
-    strokeWeight(2);
+    strokeWeight(config.borderWidth);
     fill(config.backgroundColor);
 
     for (let i = 0; i < dots.length; i++) {
@@ -135,24 +136,23 @@ function drawRoundedPolygon(points) {
 
     beginShape();
 
-    // point halfway between the first and last point
     let first = points[0];
-    let last = points[points.length - 1];
-    let anchorX = first[0] + (last[0] - first[0]) * 0.5;
-    let anchorY = first[1] + (last[1] - first[1]) * 0.5;
-    vertex(anchorX, anchorY);
+    vertex(first[0], first[1]);
 
-    // ellipse(anchorX, anchorY, 5, 5);
+    for (let i = 0; i < points.length + 1; i++) {
+        let current = points[i % points.length];
+        let next = points[(i + 1) % points.length];
 
-    for (let pointIndex = 1; pointIndex < points.length + 1; pointIndex++) {
-        let prev = points[pointIndex - 1];
-        let current = points[pointIndex % points.length];
+        // Calculate the midpoint between current and next
+        let midX = (current[0] + next[0]) / 2;
+        let midY = (current[1] + next[1]) / 2;
 
-        // start halfway between the previous and current point
-        let anchorX = prev[0] + (current[0] - prev[0]) * 0.5;
-        let anchorY = prev[1] + (current[1] - prev[1]) * 0.5;
-
-        bezierVertex(prev[0], prev[1], prev[0], prev[1], anchorX, anchorY);
+        // Draw a bezier curve to the midpoint
+        if (i === 0) {
+            vertex(midX, midY);
+        } else {
+            bezierVertex(current[0], current[1], current[0], current[1], midX, midY);
+        }
     }
 
     endShape(CLOSE);
