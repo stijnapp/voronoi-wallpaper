@@ -1,12 +1,13 @@
 let config = {
-    dotsPer100Pixels: 0.4,
+    dotsPer100Pixels: 0.5,
     speedMultiplier: 0.5,
     frameRateLimit: 30,
     backgroundColor: [0, 0, 0],
-    borderColor: [75, 75, 75],
-    borderWidth: 5,
+    borderColor: [222, 222, 222],
+    borderWidth: 3,
     canvasPadding: 50,
-    cornerSharpness: 0.7,
+    smoothCorners: true,
+    cornerSmoothness: 1,
     debug: false,
 };
 
@@ -124,15 +125,15 @@ function drawRoundedPolygon(points) {
     points.pop();
     if (points.length < 3) return;
 
-    // if (config.cornerSharpness >= 10) {
-    //     beginShape();
-    //     for (let j = 0; j < points.length; j++) {
-    //         let v = points[j];
-    //         vertex(v[0], v[1]);
-    //     }
-    //     endShape(CLOSE);
-    //     return;
-    // }
+    if (!config.smoothCorners) {
+        beginShape();
+        for (let j = 0; j < points.length; j++) {
+            let v = points[j];
+            vertex(v[0], v[1]);
+        }
+        endShape(CLOSE);
+        return;
+    }
 
     beginShape();
 
