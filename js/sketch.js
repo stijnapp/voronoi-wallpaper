@@ -1,13 +1,13 @@
 let config = {
     dotsPer100Pixels: 0.5,
-    dotCount: 0,
+    dotCount: 75,
     speedMultiplier: 0.5,
     frameRateLimit: 60,
     backgroundColor: [0, 0, 0],
-    borderColor: [122,122,122],
+    borderColor: [222,222,222],
     cornerRadius: 10,
-    glowSize: 10,
-    glowAlpha: 50
+    glowSize: 8,
+    glowAlpha: 80
 };
 
 let dots = [];
@@ -15,24 +15,15 @@ let lastTime = 0;
 let delaunay, voronoi;
 const CANVAS_PADDING = 50;
 
-// Graphics buffers for glow effect
-let shapeBuffer;
-let glowBuffer;
-
 function setup() {
     createCanvas(windowWidth, windowHeight);
-
-    // Initialize graphics buffers for glow effect
-    shapeBuffer = createGraphics(width, height);
-    glowBuffer = createGraphics(width, height);
-
     generateRandomDots();
     frameRate(config.frameRateLimit);
     lastTime = millis();
 }
 
 function draw() {
-    background(config.borderColor);
+    background(config.borderColor); // Set background color
     updateDots();
     drawVoronoiCells();
     // drawDebugDots(255, 0, 0);
@@ -48,11 +39,6 @@ function draw() {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-
-    // Recreate graphics buffers with new dimensions
-    shapeBuffer = createGraphics(width, height);
-    glowBuffer = createGraphics(width, height);
-
     generateRandomDots();
 }
 
@@ -122,50 +108,24 @@ function drawVoronoiCells() {
     delaunay = d3.Delaunay.from(dots.map(dot => [dot.x, dot.y]));
     voronoi = delaunay.voronoi([-CANVAS_PADDING, -CANVAS_PADDING, width + CANVAS_PADDING, height + CANVAS_PADDING]);
 
-    // Clear buffers
-    shapeBuffer.clear();
-    glowBuffer.clear();
-
-    // Draw shapes to shape buffer (solid polygons)
-    shapeBuffer.fill(config.backgroundColor);
-    shapeBuffer.noStroke();
-
-    // Draw glow to glow buffer (outline only)
-    glowBuffer.noFill();
-    glowBuffer.stroke(config.borderColor[0], config.borderColor[1], config.borderColor[2], config.glowAlpha);
-    glowBuffer.strokeWeight(config.glowSize);
-
-    // Draw each voronoi cell to both buffers
-    for (let i = 0; i < dots.length; i++) {
-        let cell = voronoi.cellPolygon(i);
-        if (cell && cell.length > 2) {
-            drawRoundedPolygonToBuffer(cell, shapeBuffer, true);  // filled shape
-            drawRoundedPolygonToBuffer(cell, glowBuffer, false); // outline only
-        }
-    }
-
-    // Apply blur to glow buffer
-    glowBuffer.filter(BLUR, config.glowSize);
-
-    // Create masked glow effect
-    let glowImage = glowBuffer.get();
-    glowImage.mask(shapeBuffer);
-
-    // Draw to main canvas
+    // Draw Voronoi cells with smooth rounded corners
     stroke(config.borderColor);
     strokeWeight(2);
     fill(config.backgroundColor);
 
-    // First draw the solid shapes
     for (let i = 0; i < dots.length; i++) {
         let cell = voronoi.cellPolygon(i);
         if (cell && cell.length > 2) {
+            // beginShape();
+            // for (let j = 0; j < cell.length; j++) {
+            //     let v = cell[j];
+            //     vertex(v[0], v[1]);
+            // }
+            // endShape(CLOSE);
+
             drawRoundedPolygon(cell);
         }
     }
-
-    // Then draw the glow effect on top
-    image(glowImage, 0, 0, width, height);
 }
 
 function drawRoundedPolygon(points) {
@@ -195,39 +155,6 @@ function drawRoundedPolygon(points) {
     }
 
     endShape(CLOSE);
-}
-
-function drawRoundedPolygonToBuffer(points, buffer, filled) {
-    let polygonPoints = [...points];
-    polygonPoints.pop();
-    if (polygonPoints.length < 3) return;
-
-    if (filled) {
-        buffer.beginShape();
-    } else {
-        buffer.beginShape();
-        buffer.noFill();
-    }
-
-    // point halfway between the first and last point
-    let first = polygonPoints[0];
-    let last = polygonPoints[polygonPoints.length - 1];
-    let anchorX = first[0] + (last[0] - first[0]) * 0.5;
-    let anchorY = first[1] + (last[1] - first[1]) * 0.5;
-    buffer.vertex(anchorX, anchorY);
-
-    for (let pointIndex = 1; pointIndex < polygonPoints.length + 1; pointIndex++) {
-        let prev = polygonPoints[pointIndex - 1];
-        let current = polygonPoints[pointIndex % polygonPoints.length];
-
-        // start halfway between the previous and current point
-        let anchorX = prev[0] + (current[0] - prev[0]) * 0.5;
-        let anchorY = prev[1] + (current[1] - prev[1]) * 0.5;
-
-        buffer.bezierVertex(prev[0], prev[1], prev[0], prev[1], anchorX, anchorY);
-    }
-
-    buffer.endShape(CLOSE);
 }
 
 function drawDebugDots(r, g, b) {
