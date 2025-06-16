@@ -122,7 +122,7 @@
 	"snapshotformat" : 0,
 	"snapshotoverlay" : "",
 	"tags" : [ "Abstract" ],
-	"title" : "OLED Voronoi",
+	"title" : "Voronoi",
 	"type" : "web",
 	"version" : 0
 }
