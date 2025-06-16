@@ -1,16 +1,15 @@
 let config = {
     dotsPer100Pixels: 0.5,
     speedMultiplier: 0.5,
-    // frameRateLimit: 30, // TODO: put back to 30
-    frameRateLimit: 165,
+    frameRateLimit: 240, // TODO: put back to 30
     backgroundColor: [0, 0, 0],
     borderColor: [255, 255, 255],
     borderWidth: 3,
     canvasPadding: 50,
     smoothCorners: true,
-    maxSmoothing: 20,
+    maxSmoothing: 40,
     debug: false,
-    fps: true, // TODO: put back to false
+    fps: true,
 };
 
 let dots = [];
@@ -38,6 +37,10 @@ function draw() {
 
     if (config.fps) {
         drawFrameRate();
+
+        // stroke(255, 0, 0);
+        // strokeWeight(1);
+        // line(50, 100, 50 + config.maxSmoothing, 100);
     }
 }
 
@@ -163,13 +166,13 @@ function drawRoundedPolygon(points) {
         // the starting point is either the midpoint of the previous line or closer to the current point, depending on config.maxSmoothing (which is the maximum distance to the point in pixels)
         let startPoint = distanceToPrevLineMidpoint < config.maxSmoothing ? prevLineMiddle : [
             // calculate the point along the line between the previous point and the current point, at the distance of config.maxSmoothing away from the current point
-            currPoint[0] - (currPoint[0] - prevPoint[0]) * (config.maxSmoothing / distanceToPrevLineMidpoint),
-            currPoint[1] - (currPoint[1] - prevPoint[1]) * (config.maxSmoothing / distanceToPrevLineMidpoint)
+            currPoint[0] - (currPoint[0] - prevPoint[0]) * (config.maxSmoothing / dist(prevPoint[0], prevPoint[1], currPoint[0], currPoint[1])),
+            currPoint[1] - (currPoint[1] - prevPoint[1]) * (config.maxSmoothing / dist(prevPoint[0], prevPoint[1], currPoint[0], currPoint[1]))
         ];
 
         let endPoint = distanceToNextLineMidpoint < config.maxSmoothing ? nextLineMiddle : [
-            currPoint[0] - (currPoint[0] - nextPoint[0]) * (config.maxSmoothing / distanceToNextLineMidpoint),
-            currPoint[1] - (currPoint[1] - nextPoint[1]) * (config.maxSmoothing / distanceToNextLineMidpoint)
+            currPoint[0] - (currPoint[0] - nextPoint[0]) * (config.maxSmoothing / dist(nextPoint[0], nextPoint[1], currPoint[0], currPoint[1])),
+            currPoint[1] - (currPoint[1] - nextPoint[1]) * (config.maxSmoothing / dist(nextPoint[0], nextPoint[1], currPoint[0], currPoint[1]))
         ];
 
         vertex(startPoint[0], startPoint[1]);
@@ -178,9 +181,6 @@ function drawRoundedPolygon(points) {
             currPoint[0], currPoint[1],
             endPoint[0], endPoint[1]
         );
-
-        ellipse(startPoint[0], startPoint[1], 15, 15);
-        ellipse(endPoint[0], endPoint[1], 15, 15);
     }
 
     endShape(CLOSE);
@@ -217,13 +217,23 @@ function drawDebugLines(r, g, b) {
 
 function drawFrameRate() {
     // draw the framerate as text in the top left corner
-    previousFPS.push(frameRate());
+    let framerate = frameRate();
+    if (framerate <= 999) {
+        previousFPS.push(frameRate());
+    }
+
     if (previousFPS.length > 100) {
         previousFPS.shift();
     }
+
     let avgFPS = previousFPS.reduce((a, b) => a + b, 0) / previousFPS.length;
+
     fill(255);
     noStroke();
-    textSize(16);
-    text(`FPS: ${avgFPS.toFixed(0)}`, 50, 50);
+    textSize(20);
+    textAlign(LEFT, TOP);
+    text(`FPS: ${framerate.toFixed(0)}`, 50, 50);
+    text(`Avg FPS: ${avgFPS.toFixed(0)}`, 50, 70);
+    text(`min FPS: ${Math.min(...previousFPS).toFixed(0)}`, 50, 90);
+    text(`max FPS: ${Math.max(...previousFPS).toFixed(0)}`, 50, 110);
 }
