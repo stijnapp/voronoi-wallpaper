@@ -104,26 +104,13 @@
 				"order" : 10,
 				"text" : "Fading Outline Color",
 				"type" : "color",
-				"value" : "0 0 0"
+				"value" : "0 0 0",
+				"condition" : "showfadingoutline"
 			},
-			"showdots" :
+			"debugfps" :
 			{
 				"order" : 11,
-				"text" : "Show Debug Dots",
-				"type" : "bool",
-				"value" : false
-			},
-			"showlines" :
-			{
-				"order" : 12,
-				"text" : "Show Debug Lines",
-				"type" : "bool",
-				"value" : false
-			},
-			"showfps" :
-			{
-				"order" : 13,
-				"text" : "Show FPS Counter",
+				"text" : "Show Debug FPS",
 				"type" : "bool",
 				"value" : false
 			}

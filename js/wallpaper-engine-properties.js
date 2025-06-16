@@ -55,16 +55,8 @@ window.wallpaperPropertyListener = {
         }
 
         // Debug Properties
-        if (properties.showdots) {
-            config.debug.showDots = properties.showdots.value;
-        }
-
-        if (properties.showlines) {
-            config.debug.showLines = properties.showlines.value;
-        }
-
-        if (properties.showfps) {
-            config.debug.showFPS = properties.showfps.value;
+        if (properties.debugfps) {
+            config.debug.showFPS = properties.debugfps.value;
         }
     },
 
