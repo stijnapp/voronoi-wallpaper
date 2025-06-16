@@ -48,7 +48,7 @@
 			"dotspread" :
 			{
 				"order" : 4,
-				"text" : "Dot Position Spread",
+				"text" : "Dot Start Position Spread",
 				"type" : "slider",
 				"value" : 100,
 				"min" : 0,
