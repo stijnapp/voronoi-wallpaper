@@ -9,7 +9,7 @@ let config = {
     // dots
     dotsPer100Pixels: 0.3,
     speedMultiplier: 1,
-    moveAwayDistance: 20, // set to 0 to disable moving away from close dots
+    moveAwayDistance: 50, // set to 0 to disable moving away from close dots
     generatedDotSpread: 100,
 
     // styling
@@ -140,23 +140,41 @@ function updateDots() {
 
         // move away from close dots
         if (config.moveAwayDistance > 0) {
+            let closestDot = null;
+            let closestDistance = Infinity;
+
             for (let otherDot of dots) {
                 if (otherDot === dot) continue;
 
                 let distance = dist(dot.x, dot.y, otherDot.x, otherDot.y);
                 if (distance >= config.moveAwayDistance) continue;
 
-                let angleFromOtherDot = atan2(dot.y - otherDot.y, dot.x - otherDot.x);
-
-                // add .1 to the direction to move away from the other dot
-                if (dot.direction < angleFromOtherDot) {
-                    dot.direction += 1 / distance;
-                } else {
-                    dot.direction -= 1 / distance;
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestDot = otherDot;
                 }
-
-                break; // Only change direction once per frame
             }
+
+            if (!closestDot) continue;
+
+            let angleFromOtherDot = atan2(dot.y - closestDot.y, dot.x - closestDot.x);
+
+            // Calculate the shortest angular difference between current direction and desired direction
+            let angleDifference = angleFromOtherDot - dot.direction;
+
+            // Normalize the angle difference to be between -PI and PI (shortest path)
+            while (angleDifference > PI) angleDifference -= TWO_PI;
+            while (angleDifference < -PI) angleDifference += TWO_PI;
+
+            // draw a line in the angleFromOtherDot direction
+            stroke(0, 255, 0);
+            line(dot.x, dot.y, closestDot.x, closestDot.y);
+            stroke(0, 0, 255);
+            line(dot.x, dot.y, dot.x + cos(angleFromOtherDot) * 20, dot.y + sin(angleFromOtherDot) * 20);
+
+            // direction change speed should be higher when the distance is smaller
+            let distanceFactor = map(closestDistance, 0, config.moveAwayDistance, 1, 0) * 0.1;
+            dot.direction += angleDifference * distanceFactor;
         }
     }
 }
@@ -247,6 +265,9 @@ function drawDebugDots() {
         fill(255, 0, 0);
         noStroke();
         ellipse(dot.x, dot.y, 5, 5);
+
+        stroke(255, 0, 0);
+        line(dot.x, dot.y, dot.x + cos(dot.direction) * (50 * dot.speed), dot.y + sin(dot.direction) * (50 * dot.speed));
     }
 }
 
