@@ -26,6 +26,5 @@ main {
 	top: 0;
 	left: 0;
 
-	backdrop-filter: blur(2px);
 	box-shadow: 0px 0px 50px 50px rgba(0, 0, 0, 1) inset;
 }

@@ -2,7 +2,7 @@ let config = {
     // canvas
     frameRateLimit: 30,
     canvasPadding: 50,
-    blurRadius: 2, // TODO: implement - edit `backdrop-filter: blur(2px)` of `.overlay`
+    blurRadius: 2,
 
     // dots
     dotsPer100Pixels: 0.3,
@@ -12,8 +12,7 @@ let config = {
 
     // styling
     borderWidth: 3,
-    smoothCorners: true,
-    maxSmoothing: 40,
+    maxSmoothing: 40, // set to 0 to disable smoothing
     backgroundColor: [0, 0, 0],
     borderColor: [255, 255, 255],
 
@@ -32,6 +31,7 @@ let delaunay, voronoi;
 let previousFPS = [];
 
 function setup() {
+    applyOverlayBlur();
     createCanvas(windowWidth, windowHeight);
     generateRandomDots();
     frameRate(config.frameRateLimit);
@@ -49,6 +49,13 @@ function draw() {
     drawDebugLines();
     drawFrameRate();
     drawFrameRateWarning();
+}
+
+function applyOverlayBlur() {
+    const overlay = document.querySelector('.overlay');
+    if (overlay) {
+        overlay.style.backdropFilter = `blur(${config.blurRadius}px)`;
+    }
 }
 
 function windowResized() {
@@ -176,7 +183,7 @@ function drawRoundedPolygon(points) {
     points.pop();
     if (points.length < 3) return;
 
-    if (!config.smoothCorners) {
+    if (config.maxSmoothing <= 0) {
         beginShape();
         for (let j = 0; j < points.length; j++) {
             let v = points[j];
