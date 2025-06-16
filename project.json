@@ -1,6 +1,6 @@
 {
 	"contentrating" : "Everyone",
-	"description" : "A fully customizable, real-time animated Voronoi diagram wallpaper",
+	"description" : "A fully customizable, real-time animated Voronoi diagram wallpaper.\n\nSource code on GitHub: https://github.com/stijnapp/voronoi-wallpaper",
 	"file" : "index.html",
 	"general" :
 	{
