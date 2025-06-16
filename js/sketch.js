@@ -1,15 +1,28 @@
 let config = {
-    dotsPer100Pixels: 0.3,
-    speedMultiplier: 0.5,
+    // canvas
     frameRateLimit: 30,
-    backgroundColor: [0, 0, 0],
-    borderColor: [255, 255, 255],
-    borderWidth: 3,
     canvasPadding: 50,
+    blurRadius: 2, // TODO: implement - edit `backdrop-filter: blur(2px)` of `.overlay`
+
+    // dots
+    dotsPer100Pixels: 0.3,
+    speedMultiplier: 1,
+    moveAwayDistance: 20, // set to 0 to disable moving away from close dots
+
+    // styling
+    borderWidth: 3,
     smoothCorners: true,
     maxSmoothing: 40,
-    debug: false,
-    fps: false,
+    backgroundColor: [0, 0, 0],
+    borderColor: [255, 255, 255],
+
+    // debugging
+    debug: {
+        showDots: true,
+        showLines: false,
+        showFPS: false,
+        showFrameRateWarning: false,
+    },
 };
 
 let dots = [];
@@ -30,20 +43,11 @@ function draw() {
     updateDots();
     drawVoronoiCells();
 
-    if (config.debug) {
-        drawDebugDots(255, 0, 0);
-        drawDebugLines(255, 0, 0);
-    }
-
-    if (config.fps) {
-        drawFrameRate();
-    }
-
-    // if (frameRate().toFixed(0) < config.frameRateLimit - 1) {
-    //     fill(255, 0, 0);
-    //     noStroke();
-    //     rect(50, 50, 50, 50);
-    // }
+    // DEBUGGING
+    drawDebugDots();
+    drawDebugLines();
+    drawFrameRate();
+    drawFrameRateWarning();
 }
 
 function windowResized() {
@@ -91,32 +95,37 @@ function updateDots() {
         // Bounce off edges
         if (dot.x < 0 || dot.x > width) {
             dot.direction = PI - dot.direction;
+            dot.x = constrain(dot.x, 0, width);
         }
         if (dot.y < 0 || dot.y > height) {
             dot.direction = -dot.direction;
+            dot.y = constrain(dot.y, 0, height);
         }
 
         // change speed randomly
         dot.speed += random(-0.01, 0.01);
-        dot.speed = constrain(dot.speed, 0.1, 0.3); // Keep speed within bounds
+        dot.speed = constrain(dot.speed, 0.1, 0.3);
 
         // move away from close dots
-        for (let otherDot of dots) {
-            if (otherDot !== dot) {
+        if (config.moveAwayDistance > 0) {
+            for (let otherDot of dots) {
+                if (otherDot === dot) continue;
+
                 let distance = dist(dot.x, dot.y, otherDot.x, otherDot.y);
-                if (distance < 20) { // If too close, change direction
-                    dot.direction = atan2(dot.y - otherDot.y, dot.x - otherDot.x);
-                    break; // Only change direction once per frame
+                if (distance >= config.moveAwayDistance) continue;
+
+                let angleFromOtherDot = atan2(dot.y - otherDot.y, dot.x - otherDot.x);
+
+                // add .1 to the direction to move away from the other dot
+                if (dot.direction < angleFromOtherDot) {
+                    dot.direction += 1 / distance;
+                } else {
+                    dot.direction -= 1 / distance;
                 }
+
+                break; // Only change direction once per frame
             }
         }
-
-        // change direction randomly
-        dot.direction += random(-0.05, 0.05);
-
-        // Keep dots within canvas bounds
-        dot.x = constrain(dot.x, 0, width);
-        dot.y = constrain(dot.y, 0, height);
     }
 }
 
@@ -198,18 +207,22 @@ function drawRoundedPolygon(points) {
     endShape(CLOSE);
 }
 
-function drawDebugDots(r, g, b) {
+// --- DEBUGGING FUNCTIONS ---
+function drawDebugDots() {
+    if (!config.debug.showDots) return;
+
     for (let dot of dots) {
-        fill(r, g, b);
+        fill(255, 0, 0);
         noStroke();
         ellipse(dot.x, dot.y, 5, 5);
     }
 }
 
-function drawDebugLines(r, g, b) {
+function drawDebugLines() {
+    if (!config.debug.showLines) return;
     if (dots.length < 3 || !voronoi) return;
 
-    stroke(r, g, b);
+    stroke(255, 0, 0);
     strokeWeight(0.5);
     noFill();
 
@@ -226,6 +239,8 @@ function drawDebugLines(r, g, b) {
 }
 
 function drawFrameRate() {
+    if (!config.debug.showFPS) return;
+
     let framerate = frameRate();
     if (framerate <= 999) {
         previousFPS.push(frameRate());
@@ -245,8 +260,12 @@ function drawFrameRate() {
     text(`Avg FPS: ${avgFPS.toFixed(0)}`, 50, 70);
     text(`min FPS: ${Math.min(...previousFPS).toFixed(0)}`, 50, 90);
     text(`max FPS: ${Math.max(...previousFPS).toFixed(0)}`, 50, 110);
+}
 
-    if (frameRate().toFixed(0) > config.frameRateLimit - 1 && frameRate().toFixed(0) < config.frameRateLimit + 1) {
+function drawFrameRateWarning() {
+    if (!config.debug.showFrameRateWarning) return;
+
+    if (frameRate().toFixed(0) < config.frameRateLimit - 1 && config.debug.showFrameRateWarning) {
         fill(255, 0, 0);
         noStroke();
         rect(50, 150, 50, 50);
