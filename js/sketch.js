@@ -1,5 +1,5 @@
 let config = {
-    dotsPer100Pixels: 0.2,
+    dotsPer100Pixels: 0.3,
     speedMultiplier: 0.5,
     frameRateLimit: 30,
     backgroundColor: [0, 0, 0],
@@ -39,11 +39,11 @@ function draw() {
         drawFrameRate();
     }
 
-    if (frameRate().toFixed(0) < config.frameRateLimit - 1) {
-        fill(255, 0, 0);
-        noStroke();
-        rect(50, 50, 50, 50);
-    }
+    // if (frameRate().toFixed(0) < config.frameRateLimit - 1) {
+    //     fill(255, 0, 0);
+    //     noStroke();
+    //     rect(50, 50, 50, 50);
+    // }
 }
 
 function windowResized() {
@@ -96,12 +96,23 @@ function updateDots() {
             dot.direction = -dot.direction;
         }
 
-        // change direction randomly
-        dot.direction += random(-0.05, 0.05);
-
         // change speed randomly
         dot.speed += random(-0.01, 0.01);
         dot.speed = constrain(dot.speed, 0.1, 0.3); // Keep speed within bounds
+
+        // move away from close dots
+        for (let otherDot of dots) {
+            if (otherDot !== dot) {
+                let distance = dist(dot.x, dot.y, otherDot.x, otherDot.y);
+                if (distance < 20) { // If too close, change direction
+                    dot.direction = atan2(dot.y - otherDot.y, dot.x - otherDot.x);
+                    break; // Only change direction once per frame
+                }
+            }
+        }
+
+        // change direction randomly
+        dot.direction += random(-0.05, 0.05);
 
         // Keep dots within canvas bounds
         dot.x = constrain(dot.x, 0, width);
@@ -188,7 +199,6 @@ function drawRoundedPolygon(points) {
 }
 
 function drawDebugDots(r, g, b) {
-    // Draw dots
     for (let dot of dots) {
         fill(r, g, b);
         noStroke();
@@ -199,7 +209,6 @@ function drawDebugDots(r, g, b) {
 function drawDebugLines(r, g, b) {
     if (dots.length < 3 || !voronoi) return;
 
-    // Draw Voronoi cell outlines for debugging
     stroke(r, g, b);
     strokeWeight(0.5);
     noFill();
@@ -217,7 +226,6 @@ function drawDebugLines(r, g, b) {
 }
 
 function drawFrameRate() {
-    // draw the framerate as text in the top left corner
     let framerate = frameRate();
     if (framerate <= 999) {
         previousFPS.push(frameRate());
