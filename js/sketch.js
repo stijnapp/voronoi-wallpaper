@@ -1,14 +1,16 @@
 let config = {
     dotsPer100Pixels: 0.5,
     speedMultiplier: 0.5,
-    frameRateLimit: 30,
+    // frameRateLimit: 30, // TODO: put back to 30
+    frameRateLimit: 165,
     backgroundColor: [0, 0, 0],
-    borderColor: [222, 222, 222],
+    borderColor: [255, 255, 255],
     borderWidth: 3,
     canvasPadding: 50,
     smoothCorners: true,
-    cornerSmoothness: 1,
+    maxSmoothing: 20,
     debug: false,
+    fps: true, // TODO: put back to false
 };
 
 let dots = [];
@@ -32,6 +34,9 @@ function draw() {
     if (config.debug) {
         drawDebugDots(255, 0, 0);
         drawDebugLines(255, 0, 0);
+    }
+
+    if (config.fps) {
         drawFrameRate();
     }
 }
@@ -64,6 +69,11 @@ function updateDots() {
     let currentTime = millis();
     let deltaTime = currentTime - lastTime;
     lastTime = currentTime;
+
+    if (deltaTime > 100) {
+        // If deltaTime is too large, reset to avoid large jumps
+        deltaTime = 100;
+    }
 
     // Convert deltaTime to seconds and use 60 FPS as baseline
     let timeMultiplier = deltaTime / (1000 / 60);
@@ -137,26 +147,40 @@ function drawRoundedPolygon(points) {
 
     beginShape();
 
-    for (let i = 0; i < points.length + 1; i++) {
-        let current = points[i % points.length];
-        let next = points[(i + 1) % points.length];
+    vertex(points[0][0], points[0][1]); // Start at the first point
 
-        // Calculate the midpoint between current and next
-        let midX = (current[0] + next[0]) / 2;
-        let midY = (current[1] + next[1]) / 2;
+    for (let i = 0; i < points.length; i++) {
+        let prevPoint = points[(i - 1 + points.length) % points.length];
+        let currPoint = points[i % points.length];
+        let nextPoint = points[(i + 1) % points.length];
 
-        // TODO: implement corner roundness
-        let control1x = current[0];
-        let control1y = current[1];
-        let control2x = current[0];
-        let control2y = current[1];
+        let prevLineMiddle = [(prevPoint[0] + currPoint[0]) / 2, (prevPoint[1] + currPoint[1]) / 2];
+        let nextLineMiddle = [(currPoint[0] + nextPoint[0]) / 2, (currPoint[1] + nextPoint[1]) / 2];
 
-        // Draw a bezier curve to the midpoint
-        if (i === 0) {
-            vertex(midX, midY);
-        } else {
-            bezierVertex(control1x, control1y, control2x, control2y, midX, midY);
-        }
+        let distanceToPrevLineMidpoint = dist(prevLineMiddle[0], prevLineMiddle[1], currPoint[0], currPoint[1]);
+        let distanceToNextLineMidpoint = dist(nextLineMiddle[0], nextLineMiddle[1], currPoint[0], currPoint[1]);
+
+        // the starting point is either the midpoint of the previous line or closer to the current point, depending on config.maxSmoothing (which is the maximum distance to the point in pixels)
+        let startPoint = distanceToPrevLineMidpoint < config.maxSmoothing ? prevLineMiddle : [
+            // calculate the point along the line between the previous point and the current point, at the distance of config.maxSmoothing away from the current point
+            currPoint[0] - (currPoint[0] - prevPoint[0]) * (config.maxSmoothing / distanceToPrevLineMidpoint),
+            currPoint[1] - (currPoint[1] - prevPoint[1]) * (config.maxSmoothing / distanceToPrevLineMidpoint)
+        ];
+
+        let endPoint = distanceToNextLineMidpoint < config.maxSmoothing ? nextLineMiddle : [
+            currPoint[0] - (currPoint[0] - nextPoint[0]) * (config.maxSmoothing / distanceToNextLineMidpoint),
+            currPoint[1] - (currPoint[1] - nextPoint[1]) * (config.maxSmoothing / distanceToNextLineMidpoint)
+        ];
+
+        vertex(startPoint[0], startPoint[1]);
+        bezierVertex(
+            currPoint[0], currPoint[1],
+            currPoint[0], currPoint[1],
+            endPoint[0], endPoint[1]
+        );
+
+        ellipse(startPoint[0], startPoint[1], 15, 15);
+        ellipse(endPoint[0], endPoint[1], 15, 15);
     }
 
     endShape(CLOSE);
@@ -201,5 +225,5 @@ function drawFrameRate() {
     fill(255);
     noStroke();
     textSize(16);
-    text(`FPS: ${avgFPS.toFixed(0)}`, 10, 20);
+    text(`FPS: ${avgFPS.toFixed(0)}`, 50, 50);
 }
