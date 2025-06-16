@@ -55,23 +55,16 @@
 				"max" : 300,
 				"step" : 10
 			},
-			"backgroundcolor" :
-			{
-				"order" : 5,
-				"text" : "Background Color",
-				"type" : "color",
-				"value" : "0 0 0"
-			},
 			"bordercolor" :
 			{
-				"order" : 6,
+				"order" : 5,
 				"text" : "Border Color",
 				"type" : "color",
 				"value" : "1 1 1"
 			},
 			"borderwidth" :
 			{
-				"order" : 7,
+				"order" : 6,
 				"text" : "Border Width",
 				"type" : "slider",
 				"value" : 3,
@@ -81,7 +74,7 @@
 			},
 			"smoothing" :
 			{
-				"order" : 8,
+				"order" : 7,
 				"text" : "Corner Smoothing",
 				"type" : "slider",
 				"value" : 40,
@@ -91,7 +84,7 @@
 			},
 			"blurradius" :
 			{
-				"order" : 9,
+				"order" : 8,
 				"text" : "Background Blur",
 				"type" : "slider",
 				"value" : 2,
@@ -99,23 +92,37 @@
 				"max" : 20,
 				"step" : 1
 			},
-			"showdots" :
+			"showfadingoutline" :
+			{
+				"order" : 9,
+				"text" : "Show Fading Outline",
+				"type" : "bool",
+				"value" : true
+			},
+			"fadingoutlinecolor" :
 			{
 				"order" : 10,
+				"text" : "Fading Outline Color",
+				"type" : "color",
+				"value" : "0 0 0"
+			},
+			"showdots" :
+			{
+				"order" : 11,
 				"text" : "Show Debug Dots",
 				"type" : "bool",
 				"value" : false
 			},
 			"showlines" :
 			{
-				"order" : 11,
+				"order" : 12,
 				"text" : "Show Debug Lines",
 				"type" : "bool",
 				"value" : false
 			},
 			"showfps" :
 			{
-				"order" : 12,
+				"order" : 13,
 				"text" : "Show FPS Counter",
 				"type" : "bool",
 				"value" : false

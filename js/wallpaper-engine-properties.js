@@ -6,7 +6,7 @@ window.wallpaperPropertyListener = {
         // Animation Properties
         if (properties.dotdensity) {
             config.dotsPer100Pixels = properties.dotdensity.value;
-            generateRandomDots(); // Regenerate dots when density changes
+            generateRandomDots();
         }
 
         if (properties.animationspeed) {
@@ -19,24 +19,16 @@ window.wallpaperPropertyListener = {
 
         if (properties.dotspread) {
             config.generatedDotSpread = properties.dotspread.value;
-            generateRandomDots(); // Regenerate dots when spread changes
+            generateRandomDots();
         }
 
         // Visual Properties
-        if (properties.backgroundcolor) {
-            // Convert Wallpaper Engine color format (0.0-1.0) to RGB (0-255)
-            var bgColor = properties.backgroundcolor.value.split(' ');
-            config.backgroundColor = bgColor.map(function(c) {
-                return Math.ceil(c * 255);
-            });
+        if (properties.schemecolor) {
+            config.backgroundColor = convertColorFormat(properties.schemecolor.value);
         }
 
         if (properties.bordercolor) {
-            // Convert Wallpaper Engine color format (0.0-1.0) to RGB (0-255)
-            var borderColor = properties.bordercolor.value.split(' ');
-            config.borderColor = borderColor.map(function(c) {
-                return Math.ceil(c * 255);
-            });
+            config.borderColor = convertColorFormat(properties.bordercolor.value);
         }
 
         if (properties.borderwidth) {
@@ -49,6 +41,16 @@ window.wallpaperPropertyListener = {
 
         if (properties.blurradius) {
             config.blurRadius = properties.blurradius.value;
+            applyOverlayEffects();
+        }
+
+        if (properties.showfadingoutline) {
+            config.showFadingOutline = properties.showfadingoutline.value;
+            applyOverlayEffects();
+        }
+
+        if (properties.fadingoutlinecolor) {
+            config.fadingOutlineColor = convertColorFormat(properties.fadingoutlinecolor.value);
             applyOverlayEffects();
         }
 
@@ -83,3 +85,8 @@ window.wallpaperPropertyListener = {
         }
     }
 };
+
+// function for converting color format
+function convertColorFormat(color) {
+	return color.split(' ').map(c => Math.ceil(c * 255));
+}
