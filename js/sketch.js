@@ -1,8 +1,10 @@
 let config = {
     // canvas
-    frameRateLimit: 30,
+    frameRateLimit: 30, // managed in general properties
     canvasPadding: 50,
     blurRadius: 2,
+    showFadingOutline: true,
+    fadingOutlineColor: [0, 0, 0],
 
     // dots
     dotsPer100Pixels: 0.3,
@@ -31,7 +33,7 @@ let delaunay, voronoi;
 let previousFPS = [];
 
 function setup() {
-    applyOverlayBlur();
+    applyOverlayEffects();
     createCanvas(windowWidth, windowHeight);
     generateRandomDots();
     frameRate(config.frameRateLimit);
@@ -51,10 +53,14 @@ function draw() {
     drawFrameRateWarning();
 }
 
-function applyOverlayBlur() {
+function applyOverlayEffects() {
     const overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.style.backdropFilter = `blur(${config.blurRadius}px)`;
+
+        if (config.showFadingOutline) {
+            overlay.style.boxShadow = `0px 0px 50px 50px rgb(${config.fadingOutlineColor.join(', ')}) inset`;
+        }
     }
 }
 
