@@ -8,6 +8,7 @@ let config = {
     dotsPer100Pixels: 0.3,
     speedMultiplier: 1,
     moveAwayDistance: 20, // set to 0 to disable moving away from close dots
+    generatedDotSpread: 100,
 
     // styling
     borderWidth: 3,
@@ -18,7 +19,7 @@ let config = {
 
     // debugging
     debug: {
-        showDots: true,
+        showDots: false,
         showLines: false,
         showFPS: false,
         showFrameRateWarning: false,
@@ -57,10 +58,26 @@ function windowResized() {
 
 function generateRandomDots() {
     let dotCount = Math.floor((width * height) / (100 * 100) * config.dotsPer100Pixels);
-
     dots = [];
-    for (let i = 0; i < dotCount; i++) {
-        dots.push(generateRandomDot());
+
+    let aspectRatio = width / height;
+    let rows = Math.ceil(Math.sqrt(dotCount / aspectRatio));
+    let cols = Math.ceil(dotCount / rows);
+
+    let spacingX = width / cols;
+    let spacingY = height / rows;
+
+    for (let i = 0; i < cols && dots.length < dotCount; i++) {
+        for (let j = 0; j < rows && dots.length < dotCount; j++) {
+            let x = i * spacingX + spacingX / 2 + random(-config.generatedDotSpread, config.generatedDotSpread);
+            let y = j * spacingY + spacingY / 2 + random(-config.generatedDotSpread, config.generatedDotSpread);
+            dots.push({
+                x: constrain(x, 0, width),
+                y: constrain(y, 0, height),
+                direction: random(TWO_PI),
+                speed: random(0.1, 0.3),
+            });
+        }
     }
 }
 
