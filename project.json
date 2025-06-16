@@ -105,7 +105,7 @@
 				"text" : "Fading Outline Color",
 				"type" : "color",
 				"value" : "0 0 0",
-				"condition" : "showfadingoutline"
+				"condition" : "showfadingoutline.value == true"
 			},
 			"debugfps" :
 			{

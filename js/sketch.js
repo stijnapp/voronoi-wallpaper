@@ -60,6 +60,8 @@ function applyOverlayEffects() {
 
         if (config.showFadingOutline) {
             overlay.style.boxShadow = `0px 0px 50px 50px rgb(${config.fadingOutlineColor.join(', ')}) inset`;
+        } else {
+            overlay.style.boxShadow = 'none';
         }
     }
 }
