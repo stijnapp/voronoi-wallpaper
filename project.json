@@ -1,0 +1,27 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "A real-time animated Voronoi diagram, designed for OLED screens.",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			}
+		}
+	},
+	"preview" : "preview.gif",
+	"ratingsex" : "none",
+	"ratingviolence" : "none",
+	"snapshotformat" : 0,
+	"snapshotoverlay" : "",
+	"tags" : [ "Abstract" ],
+	"title" : "OLED Voronoi",
+	"type" : "web",
+	"version" : 0
+}
