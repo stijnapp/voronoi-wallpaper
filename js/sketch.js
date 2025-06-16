@@ -1,7 +1,7 @@
 let config = {
-    dotsPer100Pixels: 0.5,
+    dotsPer100Pixels: 0.2,
     speedMultiplier: 0.5,
-    frameRateLimit: 240, // TODO: put back to 30
+    frameRateLimit: 30,
     backgroundColor: [0, 0, 0],
     borderColor: [255, 255, 255],
     borderWidth: 3,
@@ -9,7 +9,7 @@ let config = {
     smoothCorners: true,
     maxSmoothing: 40,
     debug: false,
-    fps: true,
+    fps: false,
 };
 
 let dots = [];
@@ -37,10 +37,12 @@ function draw() {
 
     if (config.fps) {
         drawFrameRate();
+    }
 
-        // stroke(255, 0, 0);
-        // strokeWeight(1);
-        // line(50, 100, 50 + config.maxSmoothing, 100);
+    if (frameRate().toFixed(0) < config.frameRateLimit - 1) {
+        fill(255, 0, 0);
+        noStroke();
+        rect(50, 50, 50, 50);
     }
 }
 
@@ -51,7 +53,6 @@ function windowResized() {
 
 function generateRandomDots() {
     let dotCount = Math.floor((width * height) / (100 * 100) * config.dotsPer100Pixels);
-    // console.log(`Generating ${dotCount} dots`);
 
     dots = [];
     for (let i = 0; i < dotCount; i++) {
@@ -236,4 +237,10 @@ function drawFrameRate() {
     text(`Avg FPS: ${avgFPS.toFixed(0)}`, 50, 70);
     text(`min FPS: ${Math.min(...previousFPS).toFixed(0)}`, 50, 90);
     text(`max FPS: ${Math.max(...previousFPS).toFixed(0)}`, 50, 110);
+
+    if (frameRate().toFixed(0) > config.frameRateLimit - 1 && frameRate().toFixed(0) < config.frameRateLimit + 1) {
+        fill(255, 0, 0);
+        noStroke();
+        rect(50, 150, 50, 50);
+    }
 }
