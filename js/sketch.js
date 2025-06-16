@@ -9,12 +9,14 @@ let config = {
     // dots
     dotsPer100Pixels: 0.3,
     speedMultiplier: 1,
-    moveAwayDistance: 50, // set to 0 to disable moving away from close dots
+    enableRepulsion: true,
+    moveAwayDistance: 50,
     generatedDotSpread: 100,
 
     // styling
     borderWidth: 3,
-    maxSmoothing: 40, // set to 0 to disable smoothing
+    enableSmoothing: true,
+    maxSmoothing: 40,
     backgroundColor: [0, 0, 0],
     borderColor: [255, 255, 255],
 
@@ -139,7 +141,7 @@ function updateDots() {
         dot.speed = constrain(dot.speed, 0.1, 0.3);
 
         // move away from close dots
-        if (config.moveAwayDistance > 0) {
+        if (config.enableRepulsion && config.moveAwayDistance > 0) {
             let closestDot = null;
             let closestDistance = Infinity;
 
@@ -209,7 +211,7 @@ function drawRoundedPolygon(points) {
     points.pop();
     if (points.length < 3) return;
 
-    if (config.maxSmoothing <= 0) {
+    if (!config.enableSmoothing || config.maxSmoothing <= 0) {
         beginShape();
         for (let j = 0; j < points.length; j++) {
             let v = points[j];

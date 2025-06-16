@@ -42,6 +42,8 @@ The wallpaper generates a grid of animated points that move randomly around the 
 
 ## Property Groups & Reference
 
+**Note**: Some properties are conditionally visible - they only appear when their parent toggle is enabled. For example, the repulsion distance slider only appears when "Enable Dot Repulsion" is checked.
+
 | Property Key         | Type     | Description                                     | Range/Options    | Default |
 | -------------------- | -------- | ----------------------------------------------- | ---------------- | ------- |
 | **Group: General**   |          |                                                 |                  |         |
@@ -49,11 +51,13 @@ The wallpaper generates a grid of animated points that move randomly around the 
 | **Group: Animation** |          |                                                 |                  |         |
 | `dotdensity`         | Slider   | Number of dots per 10,000 pixels (100x100)      | 0.1 - 2.0        | 0.3     |
 | `animationspeed`     | Slider   | Animation speed multiplier                      | 0.1 - 5.0        | 1.0     |
+| `enablerepulsion`    | Checkbox | Enable dot repulsion feature                    | True/False       | True    |
 | `repulsion`          | Slider   | Distance at which dots repel each other         | 0 - 100 pixels   | 20      |
 | `dotspread`          | Slider   | Random spread of dot initial positions          | 0 - 300 pixels   | 100     |
 | **Group: Visual**    |          |                                                 |                  |         |
 | `bordercolor`        | Color    | Color of the cell borders                       | RGB Color Picker | White   |
 | `borderwidth`        | Slider   | Width of the cell borders                       | 1 - 10 pixels    | 3       |
+| `enablesmoothing`    | Checkbox | Enable corner smoothing feature                 | True/False       | True    |
 | `smoothing`          | Slider   | Amount of corner rounding                       | 0 - 100 pixels   | 40      |
 | `blurradius`         | Slider   | Background blur effect                          | 0 - 20 pixels    | 2       |
 | `showfadingoutline`  | Checkbox | Enable fading outline effect                    | True/False       | True    |
@@ -67,8 +71,8 @@ The Wallpaper Engine integration is handled through the `wallpaperPropertyListen
 
 ### `applyUserProperties(properties)`
 Triggered when user properties change or when the wallpaper loads. Handles all custom property updates including:
-- **Animation parameters**: Dot density, speed, repulsion, and spread
-- **Visual styling**: Border colors, width, smoothing, blur effects
+- **Animation parameters**: Dot density, speed, repulsion toggle and distance, and spread
+- **Visual styling**: Border colors, width, smoothing toggle and amount, blur effects
 - **Fading outline**: Show/hide and color customization
 - **Debug options**: FPS counter display
 

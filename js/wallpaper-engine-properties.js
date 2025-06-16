@@ -13,6 +13,10 @@ window.wallpaperPropertyListener = {
             config.speedMultiplier = properties.animationspeed.value;
         }
 
+        if (properties.enablerepulsion) {
+            config.enableRepulsion = properties.enablerepulsion.value;
+        }
+
         if (properties.repulsion) {
             config.moveAwayDistance = properties.repulsion.value;
         }
@@ -33,6 +37,10 @@ window.wallpaperPropertyListener = {
 
         if (properties.borderwidth) {
             config.borderWidth = properties.borderwidth.value;
+        }
+
+        if (properties.enablesmoothing) {
+            config.enableSmoothing = properties.enablesmoothing.value;
         }
 
         if (properties.smoothing) {

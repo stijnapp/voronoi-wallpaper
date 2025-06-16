@@ -41,19 +41,27 @@
 				"step" : 0.1,
 				"precision" : 1
 			},
-			"repulsion" :
+			"enablerepulsion" :
 			{
 				"order" : 4,
+				"text" : "Enable Dot Repulsion",
+				"type" : "bool",
+				"value" : true
+			},
+			"repulsion" :
+			{
+				"order" : 5,
 				"text" : "Dot Repulsion Distance",
 				"type" : "slider",
 				"value" : 20,
 				"min" : 0,
 				"max" : 100,
-				"step" : 5
+				"step" : 5,
+				"condition" : "enablerepulsion.value == true"
 			},
 			"dotspread" :
 			{
-				"order" : 5,
+				"order" : 6,
 				"text" : "Dot Start Position Spread",
 				"type" : "slider",
 				"value" : 100,
@@ -63,20 +71,20 @@
 			},
 			"visualgroup" :
 			{
-				"order" : 6,
+				"order" : 7,
 				"text" : "Visual",
 				"type" : "group"
 			},
 			"bordercolor" :
 			{
-				"order" : 7,
+				"order" : 8,
 				"text" : "Border Color",
 				"type" : "color",
 				"value" : "1 1 1"
 			},
 			"borderwidth" :
 			{
-				"order" : 8,
+				"order" : 9,
 				"text" : "Border Width",
 				"type" : "slider",
 				"value" : 3,
@@ -84,19 +92,27 @@
 				"max" : 10,
 				"step" : 1
 			},
+			"enablesmoothing" :
+			{
+				"order" : 10,
+				"text" : "Enable Corner Smoothing",
+				"type" : "bool",
+				"value" : true
+			},
 			"smoothing" :
 			{
-				"order" : 9,
+				"order" : 11,
 				"text" : "Corner Smoothing",
 				"type" : "slider",
 				"value" : 40,
 				"min" : 0,
 				"max" : 100,
-				"step" : 5
+				"step" : 5,
+				"condition" : "enablesmoothing.value == true"
 			},
 			"blurradius" :
 			{
-				"order" : 10,
+				"order" : 12,
 				"text" : "Background Blur",
 				"type" : "slider",
 				"value" : 2,
@@ -106,14 +122,14 @@
 			},
 			"showfadingoutline" :
 			{
-				"order" : 11,
+				"order" : 13,
 				"text" : "Show Fading Outline",
 				"type" : "bool",
 				"value" : true
 			},
 			"fadingoutlinecolor" :
 			{
-				"order" : 12,
+				"order" : 14,
 				"text" : "Fading Outline Color",
 				"type" : "color",
 				"value" : "0 0 0",
@@ -121,13 +137,13 @@
 			},
 			"debuggroup" :
 			{
-				"order" : 13,
+				"order" : 15,
 				"text" : "Debug",
 				"type" : "group"
 			},
 			"debugfps" :
 			{
-				"order" : 14,
+				"order" : 16,
 				"text" : "Show Debug FPS",
 				"type" : "bool",
 				"value" : false
