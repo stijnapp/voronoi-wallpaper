@@ -127,9 +127,20 @@
 				"type" : "bool",
 				"value" : true
 			},
-			"fadingoutlinecolor" :
+			"fadingoutlineintensity" :
 			{
 				"order" : 14,
+				"text" : "Fading Outline Intensity",
+				"type" : "slider",
+				"value" : 50,
+				"min" : 0,
+				"max" : 200,
+				"step" : 5,
+				"condition" : "showfadingoutline.value == true"
+			},
+			"fadingoutlinecolor" :
+			{
+				"order" : 15,
 				"text" : "Fading Outline Color",
 				"type" : "color",
 				"value" : "0 0 0",
@@ -137,13 +148,13 @@
 			},
 			"debuggroup" :
 			{
-				"order" : 15,
+				"order" : 16,
 				"text" : "Debug",
 				"type" : "group"
 			},
 			"debugfps" :
 			{
-				"order" : 16,
+				"order" : 17,
 				"text" : "Show Debug FPS",
 				"type" : "bool",
 				"value" : false

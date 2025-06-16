@@ -57,6 +57,11 @@ window.wallpaperPropertyListener = {
             applyOverlayEffects();
         }
 
+        if (properties.fadingoutlineintensity) {
+            config.fadingOutlineIntensity = properties.fadingoutlineintensity.value;
+            applyOverlayEffects();
+        }
+
         if (properties.fadingoutlinecolor) {
             config.fadingOutlineColor = convertColorFormat(properties.fadingoutlinecolor.value);
             applyOverlayEffects();

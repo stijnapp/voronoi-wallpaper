@@ -44,26 +44,27 @@ The wallpaper generates a grid of animated points that move randomly around the 
 
 **Note**: Some properties are conditionally visible - they only appear when their parent toggle is enabled. For example, the repulsion distance slider only appears when "Enable Dot Repulsion" is checked.
 
-| Property Key         | Type     | Description                                     | Range/Options    | Default |
-| -------------------- | -------- | ----------------------------------------------- | ---------------- | ------- |
-| **Group: General**   |          |                                                 |                  |         |
-| `schemecolor`        | Color    | Background color (uses Wallpaper Engine scheme) | RGB Color Picker | Black   |
-| **Group: Animation** |          |                                                 |                  |         |
-| `dotdensity`         | Slider   | Number of dots per 10,000 pixels (100x100)      | 0.1 - 2.0        | 0.3     |
-| `animationspeed`     | Slider   | Animation speed multiplier                      | 0.1 - 5.0        | 1.0     |
-| `enablerepulsion`    | Checkbox | Enable dot repulsion feature                    | True/False       | True    |
-| `repulsion`          | Slider   | Distance at which dots repel each other         | 0 - 100 pixels   | 20      |
-| `dotspread`          | Slider   | Random spread of dot initial positions          | 0 - 300 pixels   | 100     |
-| **Group: Visual**    |          |                                                 |                  |         |
-| `bordercolor`        | Color    | Color of the cell borders                       | RGB Color Picker | White   |
-| `borderwidth`        | Slider   | Width of the cell borders                       | 1 - 10 pixels    | 3       |
-| `enablesmoothing`    | Checkbox | Enable corner smoothing feature                 | True/False       | True    |
-| `smoothing`          | Slider   | Amount of corner rounding                       | 0 - 100 pixels   | 40      |
-| `blurradius`         | Slider   | Background blur effect                          | 0 - 20 pixels    | 2       |
-| `showfadingoutline`  | Checkbox | Enable fading outline effect                    | True/False       | True    |
-| `fadingoutlinecolor` | Color    | Color of the fading outline                     | RGB Color Picker | Black   |
-| **Group: Debug**     |          |                                                 |                  |         |
-| `debugfps`           | Checkbox | Show FPS counter and statistics                 | True/False       | False   |
+| Property Key             | Type     | Description                                     | Range/Options    | Default |
+| ------------------------ | -------- | ----------------------------------------------- | ---------------- | ------- |
+| **Group: General**       |          |                                                 |                  |         |
+| `schemecolor`            | Color    | Background color (uses Wallpaper Engine scheme) | RGB Color Picker | Black   |
+| **Group: Animation**     |          |                                                 |                  |         |
+| `dotdensity`             | Slider   | Number of dots per 10,000 pixels (100x100)      | 0.1 - 2.0        | 0.3     |
+| `animationspeed`         | Slider   | Animation speed multiplier                      | 0.1 - 5.0        | 1.0     |
+| `enablerepulsion`        | Checkbox | Enable dot repulsion feature                    | True/False       | True    |
+| `repulsion`              | Slider   | Distance at which dots repel each other         | 0 - 100 pixels   | 20      |
+| `dotspread`              | Slider   | Random spread of dot initial positions          | 0 - 300 pixels   | 100     |
+| **Group: Visual**        |          |                                                 |                  |         |
+| `bordercolor`            | Color    | Color of the cell borders                       | RGB Color Picker | White   |
+| `borderwidth`            | Slider   | Width of the cell borders                       | 1 - 10 pixels    | 3       |
+| `enablesmoothing`        | Checkbox | Enable corner smoothing feature                 | True/False       | True    |
+| `smoothing`              | Slider   | Amount of corner rounding                       | 0 - 100 pixels   | 40      |
+| `blurradius`             | Slider   | Background blur effect                          | 0 - 20 pixels    | 2       |
+| `showfadingoutline`      | Checkbox | Enable fading outline effect                    | True/False       | True    |
+| `fadingoutlineintensity` | Slider   | Intensity/size of the fading outline effect     | 0 - 200 pixels   | 50      |
+| `fadingoutlinecolor`     | Color    | Color of the fading outline                     | RGB Color Picker | Black   |
+| **Group: Debug**         |          |                                                 |                  |         |
+| `debugfps`               | Checkbox | Show FPS counter and statistics                 | True/False       | False   |
 
 ## Integration Details
 

@@ -4,6 +4,7 @@ let config = {
     canvasPadding: 50,
     blurRadius: 2,
     showFadingOutline: true,
+    fadingOutlineIntensity: 50,
     fadingOutlineColor: [0, 0, 0],
 
     // dots
@@ -61,7 +62,7 @@ function applyOverlayEffects() {
         overlay.style.backdropFilter = `blur(${config.blurRadius}px)`;
 
         if (config.showFadingOutline) {
-            overlay.style.boxShadow = `0px 0px 50px 50px rgb(${config.fadingOutlineColor.join(', ')}) inset`;
+            overlay.style.boxShadow = `0px 0px ${config.fadingOutlineIntensity}px ${config.fadingOutlineIntensity}px rgb(${config.fadingOutlineColor.join(', ')}) inset`;
         } else {
             overlay.style.boxShadow = 'none';
         }
