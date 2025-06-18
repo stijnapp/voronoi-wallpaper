@@ -2,172 +2,189 @@
 	"contentrating" : "Everyone",
 	"description" : "A fully customizable, real-time animated Voronoi diagram wallpaper.\n\nSource code on GitHub: https://github.com/stijnapp/voronoi-wallpaper",
 	"file" : "index.html",
-	"general" :
+	"general" : 
 	{
-		"properties" :
+		"properties" : 
 		{
-			"schemecolor" :
+			"animationgroup" : 
+			{
+				"index" : 0,
+				"order" : 100,
+				"text" : "Animation",
+				"type" : "group"
+			},
+			"animationspeed" : 
+			{
+				"index" : 2,
+				"max" : 5,
+				"min" : 0.1,
+				"order" : 102,
+				"precision" : 1,
+				"step" : 0.1,
+				"text" : "Animation Speed",
+				"type" : "slider",
+				"value" : 1
+			},
+			"blurradius" : 
+			{
+				"index" : 11,
+				"max" : 20,
+				"min" : 0,
+				"order" : 111,
+				"step" : 1,
+				"text" : "Background Blur",
+				"type" : "slider",
+				"value" : 2
+			},
+			"bordercolor" : 
+			{
+				"index" : 7,
+				"order" : 107,
+				"text" : "Border Color",
+				"type" : "color",
+				"value" : "1 1 1"
+			},
+			"borderwidth" : 
+			{
+				"index" : 8,
+				"max" : 10,
+				"min" : 1,
+				"order" : 108,
+				"step" : 1,
+				"text" : "Border Width",
+				"type" : "slider",
+				"value" : 3
+			},
+			"debugfps" : 
+			{
+				"index" : 16,
+				"order" : 116,
+				"text" : "Show Debug FPS",
+				"type" : "bool",
+				"value" : false
+			},
+			"debuggroup" : 
+			{
+				"index" : 15,
+				"order" : 115,
+				"text" : "Debug",
+				"type" : "group"
+			},
+			"dotdensity" : 
+			{
+				"index" : 1,
+				"max" : 2,
+				"min" : 0.1,
+				"order" : 101,
+				"precision" : 1,
+				"step" : 0.1,
+				"text" : "Dot Density",
+				"type" : "slider",
+				"value" : 0.3
+			},
+			"dotspread" : 
+			{
+				"index" : 5,
+				"max" : 300,
+				"min" : 0,
+				"order" : 105,
+				"step" : 10,
+				"text" : "Dot Start Position Spread",
+				"type" : "slider",
+				"value" : 100
+			},
+			"enablerepulsion" : 
+			{
+				"index" : 3,
+				"order" : 103,
+				"text" : "Enable Dot Repulsion",
+				"type" : "bool",
+				"value" : true
+			},
+			"enablesmoothing" : 
+			{
+				"index" : 9,
+				"order" : 109,
+				"text" : "Enable Corner Smoothing",
+				"type" : "bool",
+				"value" : true
+			},
+			"fadingoutlinecolor" : 
+			{
+				"condition" : "showfadingoutline.value == true",
+				"index" : 14,
+				"order" : 114,
+				"text" : "Fading Outline Color",
+				"type" : "color",
+				"value" : "0 0 0"
+			},
+			"fadingoutlineintensity" : 
+			{
+				"condition" : "showfadingoutline.value == true",
+				"index" : 13,
+				"max" : 200,
+				"min" : 0,
+				"order" : 113,
+				"step" : 5,
+				"text" : "Fading Outline Intensity",
+				"type" : "slider",
+				"value" : 50
+			},
+			"repulsion" : 
+			{
+				"condition" : "enablerepulsion.value == true",
+				"index" : 4,
+				"max" : 100,
+				"min" : 0,
+				"order" : 104,
+				"step" : 5,
+				"text" : "Dot Repulsion Distance",
+				"type" : "slider",
+				"value" : 20
+			},
+			"schemecolor" : 
 			{
 				"order" : 0,
 				"text" : "ui_browse_properties_scheme_color",
 				"type" : "color",
 				"value" : "0 0 0"
 			},
-			"animationgroup" :
+			"showfadingoutline" : 
 			{
-				"order" : 1,
-				"text" : "Animation",
-				"type" : "group"
-			},
-			"dotdensity" :
-			{
-				"order" : 2,
-				"text" : "Dot Density",
-				"type" : "slider",
-				"value" : 0.3,
-				"min" : 0.1,
-				"max" : 2.0,
-				"step" : 0.1,
-				"precision" : 1
-			},
-			"animationspeed" :
-			{
-				"order" : 3,
-				"text" : "Animation Speed",
-				"type" : "slider",
-				"value" : 1.0,
-				"min" : 0.1,
-				"max" : 5.0,
-				"step" : 0.1,
-				"precision" : 1
-			},
-			"enablerepulsion" :
-			{
-				"order" : 4,
-				"text" : "Enable Dot Repulsion",
-				"type" : "bool",
-				"value" : true
-			},
-			"repulsion" :
-			{
-				"order" : 5,
-				"text" : "Dot Repulsion Distance",
-				"type" : "slider",
-				"value" : 20,
-				"min" : 0,
-				"max" : 100,
-				"step" : 5,
-				"condition" : "enablerepulsion.value == true"
-			},
-			"dotspread" :
-			{
-				"order" : 6,
-				"text" : "Dot Start Position Spread",
-				"type" : "slider",
-				"value" : 100,
-				"min" : 0,
-				"max" : 300,
-				"step" : 10
-			},
-			"visualgroup" :
-			{
-				"order" : 7,
-				"text" : "Visual",
-				"type" : "group"
-			},
-			"bordercolor" :
-			{
-				"order" : 8,
-				"text" : "Border Color",
-				"type" : "color",
-				"value" : "1 1 1"
-			},
-			"borderwidth" :
-			{
-				"order" : 9,
-				"text" : "Border Width",
-				"type" : "slider",
-				"value" : 3,
-				"min" : 1,
-				"max" : 10,
-				"step" : 1
-			},
-			"enablesmoothing" :
-			{
-				"order" : 10,
-				"text" : "Enable Corner Smoothing",
-				"type" : "bool",
-				"value" : true
-			},
-			"smoothing" :
-			{
-				"order" : 11,
-				"text" : "Corner Smoothing",
-				"type" : "slider",
-				"value" : 40,
-				"min" : 0,
-				"max" : 100,
-				"step" : 5,
-				"condition" : "enablesmoothing.value == true"
-			},
-			"blurradius" :
-			{
-				"order" : 12,
-				"text" : "Background Blur",
-				"type" : "slider",
-				"value" : 2,
-				"min" : 0,
-				"max" : 20,
-				"step" : 1
-			},
-			"showfadingoutline" :
-			{
-				"order" : 13,
+				"index" : 12,
+				"order" : 112,
 				"text" : "Show Fading Outline",
 				"type" : "bool",
 				"value" : true
 			},
-			"fadingoutlineintensity" :
+			"smoothing" : 
 			{
-				"order" : 14,
-				"text" : "Fading Outline Intensity",
-				"type" : "slider",
-				"value" : 50,
+				"condition" : "enablesmoothing.value == true",
+				"index" : 10,
+				"max" : 100,
 				"min" : 0,
-				"max" : 200,
+				"order" : 110,
 				"step" : 5,
-				"condition" : "showfadingoutline.value == true"
+				"text" : "Corner Smoothing",
+				"type" : "slider",
+				"value" : 40
 			},
-			"fadingoutlinecolor" :
+			"visualgroup" : 
 			{
-				"order" : 15,
-				"text" : "Fading Outline Color",
-				"type" : "color",
-				"value" : "0 0 0",
-				"condition" : "showfadingoutline.value == true"
-			},
-			"debuggroup" :
-			{
-				"order" : 16,
-				"text" : "Debug",
+				"index" : 6,
+				"order" : 106,
+				"text" : "Visual",
 				"type" : "group"
-			},
-			"debugfps" :
-			{
-				"order" : 17,
-				"text" : "Show Debug FPS",
-				"type" : "bool",
-				"value" : false
 			}
 		}
 	},
 	"preview" : "preview.gif",
 	"ratingsex" : "none",
 	"ratingviolence" : "none",
-	"snapshotformat" : 0,
-	"snapshotoverlay" : "",
 	"tags" : [ "Abstract" ],
 	"title" : "Voronoi",
 	"type" : "web",
-	"version" : 0
+	"version" : 1,
+	"workshopid" : "3501253593",
+	"workshopurl" : "steam://url/CommunityFilePage/3501253593"
 }
