@@ -209,7 +209,10 @@ function drawVoronoiCells() {
 }
 
 function drawRoundedPolygon(points) {
-    points.pop();
+    if (int(points[0][0]) === int(points[points.length - 1][0]) && int(points[0][1]) === int(points[points.length - 1][1])) {
+        points.pop();
+    }
+
     if (points.length < 3) return;
 
     if (!config.enableSmoothing || config.maxSmoothing <= 0) {
